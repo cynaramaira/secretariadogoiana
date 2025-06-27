@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico: O Novo Rosto do Poder em Goiana</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Fase 5 (Revisada): Parâmetros de Design Inspirados no Exemplo */
+        :root {
+            --cor-primaria: #024796;
+            --cor-secundaria: #ff0000;
+            --cor-texto: #334155; /* slate-700 */
+            --cor-texto-claro: #64748b; /* slate-500 */
+            --cor-branca: #ffffff;
+            --cor-fundo: #f8fafc; /* slate-50 */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            overflow-x: hidden;
+        }
+
+        /* Seção Hero - Inspirada no exemplo */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--cor-branca);
+            position: relative;
+            background: linear-gradient(135deg, #012a5a 0%, var(--cor-primaria) 100%);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: clamp(15px, 4vw, 30px);
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 180px;
+        }
+
+        .hero-stat-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--cor-branca);
+            display: block;
+        }
+
+        .hero-stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .floating-elements {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            animation: float 25s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 1; }
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            background: var(--cor-fundo);
+            position: relative;
+            z-index: 10;
+            padding: 1px 0 50px 0; /* padding 1px para conter margens */
+        }
+        
+        .section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--cor-branca);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+        }
+
+        .section-subtitle, .section p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--cor-texto-claro);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Grid de Secretários (Inspirado nos cards de candidatos) */
+        #search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0; /* slate-200 */
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #search-input:focus {
+            outline: none;
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 3px rgba(2, 71, 150, 0.2);
+        }
+
+        .secretarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .secretario-card {
+            background-color: var(--cor-branca);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .secretario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+
+        .secretario-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .secretario-foto {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--cor-primaria);
+            flex-shrink: 0;
+        }
+        .secretario-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cor-texto);
+            margin: 0;
+        }
+        .secretario-info p {
+            font-size: 0.9rem;
+            color: var(--cor-secundaria);
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .secretario-bio {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding-top 0.5s ease-in-out;
+            font-size: 0.95rem;
+            color: var(--cor-texto-claro);
+            line-height: 1.6;
+            padding-top: 0;
+            margin-top: 15px;
+            border-top: 1px solid transparent;
+        }
+        .secretario-card.expanded .secretario-bio {
+            max-height: 200px; /* Adjust as needed */
+            padding-top: 15px;
+            border-top-color: #e2e8f0;
+        }
+
+        /* Seção Acordeão */
+        .expandable-item {
+            background: var(--cor-branca);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+        .expandable-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--cor-primaria);
+            color: var(--cor-branca);
+        }
+        .expandable-header h3 {
+            font-size: 1.2rem; margin: 0;
+        }
+        .expandable-header::after {
+            content: '+';
+            font-size: 2rem;
+            font-weight: 300;
+            transition: transform 0.3s ease;
+        }
+        .expandable-item.expanded .expandable-header::after {
+            transform: rotate(45deg);
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .expandable-item.expanded .expandable-content {
+            max-height: 500px; /* Adjust for chart */
+        }
+        .expandable-inner {
+            padding: 20px;
+        }
+        .chart-container {
+            height: 300px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.9rem;
+            color: #94a3b8; /* slate-400 */
+        }
+        .logo-footer { max-width: 120px; opacity: 0.7; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .hero-stat { min-width: 150px; }
+            .section { padding: 40px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <div class="floating-elements"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">O Novo Rosto do Poder em Goiana</h1>
+            <p class="hero-subtitle">Marcílio Régio assume prefeitura após eleição suplementar e apresenta a equipe para governar a cidade.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">1</span>
+                    <span class="hero-stat-label">Eleição Suplementar</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">21</span>
+                    <span class="hero-stat-label">Novos Cargos</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">1</span>
+                    <span class="hero-stat-label">Ex-Prefeito no Apoio</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Contexto da Mudança</h2>
+                <p>Após uma eleição anulada pelo TSE, Marcílio Régio assume com o desafio de "reorganizar a casa", criticando a gestão anterior e priorizando a retomada de serviços básicos.</p>
+            </div>
+        </section>
+
+        <div class="expandable-item" style="max-width: 900px; margin: 20px auto;">
+            <div class="expandable-header" onclick="toggleExpand(this)">
+                <h3>📊 Análise da Equipe</h3>
+            </div>
+            <div class="expandable-content">
+                <div class="expandable-inner">
+                    <p class="section-subtitle" style="margin-bottom: 20px;">O secretariado mescla figuras de carreira política com perfis técnicos de diversas áreas para enfrentar os desafios de gestão.</p>
+                    <div class="chart-container">
+                        <canvas id="teamCompositionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Conheça o Secretariado</h2>
+                <p>Navegue pelos perfis para conhecer quem estará à frente das pastas-chave. Clique em um card para ver mais detalhes.</p>
+            </div>
+            <input type="text" id="search-input" placeholder="Buscar por nome ou secretaria...">
+            <div class="secretarios-grid" id="secretarios-container">
+                <!-- Cards dos Secretários serão inseridos aqui via JS -->
+            </div>
+        </section>
+        
+        <footer>
+            <img src="https://jamildo.com.br/media/uploads/logojamildo.png" alt="Logo Jamildo" class="logo-footer">
+            <p><strong>Fontes:</strong> Release da assessoria de imprensa, Jamildo.com.</p>
+        </footer>
+    </div>
+
+    <script>
+    const secretarios = [
+        { nome: "Alexandre Medeiros de A. S. Lima", pasta: "Administração", bio: "Enfermeiro, especialista em intensivismo, professor e empresário. Com experiência em gestão na saúde em outros municípios.", foto: "https://jamildo.com/media/uploads/2025/06/alexandre_medeiros_de_albuquerque_dos_santos_lima_secretaria_de_administracao_d2090511857.jpg" },
+        { nome: "Emanuel Farias", pasta: "Agricultura e Pesca", bio: "Assessor parlamentar desde 2021 no gabinete da vereadora Ana de Marcílio. Possui registro no CRECI.", foto: "https://placehold.co/80x80/024796/FFF?text=E" },
+        { nome: "Renato Sandré", pasta: "Articulação Política e Governo", bio: "Ex-vereador por 3 mandatos (sendo o mais votado em 2012 e presidente da Câmara), ex-conselheiro tutelar e ex-assessor da Governadora Raquel Lyra.", foto: "https://placehold.co/80x80/024796/FFF?text=R" },
+        { nome: "Fernando Veloso", pasta: "Comunicação", bio: "Jornalista com mais de 10 anos de experiência como professor. Foi repórter/editor na Globo Nordeste, JC, DP e Folha PE, e assessor de prefeitos e governadores.", foto: "https://placehold.co/80x80/024796/FFF?text=F" },
+        { nome: "Ana Silveira", pasta: "Desenvolvimento Social", bio: "Professora e vereadora em seu quinto mandato. Já atuou na gestão da assistência social entre 2002 e 2004.", foto: "https://jamildo.com/media/uploads/2025/secretariosgoiana/ana_silveira_desenvolvimento_social.jpeg" },
+        { nome: "Carlos Viégas Júnior", pasta: "Educação", bio: "Advogado com pós em Direito Administrativo. Vereador de Goiana pelo quinto mandato e ex-presidente da Câmara.", foto: "https://placehold.co/80x80/024796/FFF?text=C" },
+        { nome: "Gilberto Miranda", pasta: "Esportes e Juventude", bio: "Administrador com MBA em Administração Pública. Foi o primeiro Secretário de Esportes de Goiana, de 2022 a 2024.", foto: "https://placehold.co/80x80/024796/FFF?text=G" },
+        { nome: "Cal Volia", pasta: "Finanças", bio: "Administrador com vasta experiência em gestão pública. Foi prefeito de Itapissuma por dois mandatos e assessor especial no Governo do Estado.", foto: "https://placehold.co/80x80/024796/FFF?text=C" },
+        { nome: "Simone Maia", pasta: "Mulher", bio: "Formada em Gestão de Pessoas, foi coordenadora e secretária da Mulher, sendo responsável pela criação do conselho e da própria secretaria.", foto: "https://placehold.co/80x80/024796/FFF?text=S" },
+        { nome: "Guilherme Mota Gomes", pasta: "Obras", bio: "Engenheiro Civil com pós em Gerenciamento de Obras. Foi Diretor na EMLURB e chefe do Gabinete de Projetos Especiais na Prefeitura do Recife.", foto: "https://placehold.co/80x80/024796/FFF?text=G" },
+        { nome: "Adriana Mola", pasta: "Planejamento", bio: "Arquiteta e Urbanista com múltiplas especializações, incluindo Planejamento Estratégico. Já ocupou o cargo de Secretária de Planejamento em Goiana.", foto: "https://jamildo.com/media/uploads/2025/secretariosgoiana/adriana_mola_planejamento.jpeg" },
+        { nome: "André Mandarine", pasta: "Saúde", bio: "Advogado com pós em Direito Público e Gestão Pública. Retorna à Secretaria de Saúde, onde já atuou em 2024.", foto: "https://jamildo.com/media/uploads/2025/secretariosgoiana/andre_mandarine_saude.jpeg" },
+        { nome: "Bruno Souza Machado", pasta: "Segurança, Trânsito e Transporte", bio: "Coronel da Polícia Militar de Pernambuco, com ampla experiência em comando e planejamento operacional em diversas unidades da PMPE.", foto: "https://jamildo.com/media/uploads/2025/secretariosgoiana/bruno_souza_machado_transporte_seguranca_cidada.jpeg" },
+        { nome: "Ítalo Coco", pasta: "Turismo", bio: "Graduado em Turismo. Já foi Diretor de Turismo e de Cultura em Goiana, participando da criação dos conselhos municipais das áreas.", foto: "https://placehold.co/80x80/024796/FFF?text=I" },
+        { nome: "Eudes Marconi Morais", pasta: "Chefia de Gabinete", bio: "Contador e formado em Direito, com experiência em diversas secretarias como Administração, Finanças e Políticas Sociais.", foto: "https://placehold.co/80x80/024796/FFF?text=E" },
+        { nome: "Ana Paula Guimarães", pasta: "Controladoria Geral", bio: "Advogada com mais de 20 anos de experiência, referência em Governança, Risco e Conformidade (GRC), com pós-graduação pelo Insper/SP e UFPE.", foto: "https://jamildo.com/media/uploads/2025/secretariosgoiana/ana_paula_guimaraes_controladoria-geral.jpeg" },
+        { nome: "Mércia Moura", pasta: "AD Goiana", bio: "Empresária com 40 anos de experiência. Já foi Secretária de Turismo em 1997. Recebeu o Prêmio Tacaruna Mulher em 2020.", foto: "https://placehold.co/80x80/024796/FFF?text=M" },
+        { nome: "Edjane Tavares", pasta: "Agência de Meio Ambiente (AMAG)", bio: "Graduada em Educação com especialização em Gestão Pública. Foi secretária em Abreu e Lima e Igarassu e coordenou projetos na ONU.", foto: "https://placehold.co/80x80/024796/FFF?text=E" },
+        { nome: "Danyelle Sena", pasta: "Faculdade de Goiana (FADMAG)", bio: "Advogada e professora universitária. Foi gerente geral do PROCON-PE e Procuradora Adjunta de Goiana.", foto: "https://placehold.co/80x80/024796/FFF?text=D" },
+        { nome: "Olga Sena", pasta: "Goianaprev", bio: "Psicóloga, foi vereadora por dois mandatos e Secretária de Ação Social e Articulação Política.", foto: "https://placehold.co/80x80/024796/FFF?text=O" },
+        { nome: "Rodrigo Dias", pasta: "Procuradoria Geral", bio: "Advogado, mestrando em Políticas Públicas e Gestão pelo IDP-SP, com múltiplas pós-graduações em Direito e Gestão.", foto: "https://placehold.co/80x80/024796/FFF?text=R" }
+    ];
+
+    function createFloatingElements() {
+        const container = document.querySelector('.floating-elements');
+        if (!container) return;
+        for (let i = 0; i < 15; i++) {
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.style.width = element.style.height = (Math.random() * 80 + 20) + 'px';
+            element.style.left = Math.random() * 100 + '%';
+            element.style.animationDelay = Math.random() * 25 + 's';
+            element.style.animationDuration = (Math.random() * 20 + 15) + 's';
+            container.appendChild(element);
+        }
+    }
+
+    function renderCards(filter = '') {
+        const container = document.getElementById('secretarios-container');
+        if (!container) return;
+        container.innerHTML = '';
+        const lowerCaseFilter = filter.toLowerCase();
+
+        secretarios.forEach(sec => {
+            if (sec.nome.toLowerCase().includes(lowerCaseFilter) || sec.pasta.toLowerCase().includes(lowerCaseFilter)) {
+                const card = document.createElement('div');
+                card.className = 'secretario-card';
+                card.innerHTML = `
+                    <div class="secretario-header">
+                        <img src="${sec.foto}" alt="Foto de ${sec.nome}" class="secretario-foto" onerror="this.onerror=null;this.src='https://placehold.co/80x80/cccccc/333?text=?';">
+                        <div class="secretario-info">
+                            <h3>${sec.nome}</h3>
+                            <p>${sec.pasta}</p>
+                        </div>
+                    </div>
+                    <div class="secretario-bio">
+                        ${sec.bio}
+                    </div>
+                `;
+                card.addEventListener('click', () => card.classList.toggle('expanded'));
+                container.appendChild(card);
+            }
+        });
+    }
+
+    function toggleExpand(header) {
+        const item = header.parentElement;
+        item.classList.toggle('expanded');
+    }
+
+    function createTeamCompositionChart() {
+        const ctx = document.getElementById('teamCompositionChart')?.getContext('2d');
+        if (!ctx) return;
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Perfil Técnico', 'Carreira Política (Eleitos)', 'Ligação Política/Assessoria'],
+                datasets: [{
+                    data: [13, 5, 3], // Contagem manual das categorias
+                    backgroundColor: ['#024796', '#5b9bd5', '#ff0000'],
+                    borderColor: 'rgba(255, 255, 255, 0.9)',
+                    borderWidth: 3,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#334155',
+                            font: { family: 'Inter', size: 12 },
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        createFloatingElements();
+        renderCards();
+        createTeamCompositionChart();
+        document.getElementById('search-input')?.addEventListener('input', (e) => renderCards(e.target.value));
+    });
+    </script>
+</body>
+</html>
